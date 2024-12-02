@@ -7,24 +7,7 @@ import (
 )
 
 func PartOne(input []byte) int {
-    var left []int
-    var right []int
-    appendLeft := true
-    var buffer bytes.Buffer
-    for _, char := range input {
-        if char != 32 && int64(char) != 10 {
-            buffer.WriteString(string(char))
-        } else {
-            num, _ := strconv.Atoi(buffer.String())
-            if appendLeft {
-                left = append(left, num)
-            } else {
-                right = append(right, num)
-            }
-            appendLeft = !appendLeft
-            buffer.Reset()
-        }
-    }
+    left, right := getArrays(input)
     sort.Sort(sort.IntSlice(left))
     sort.Sort(sort.IntSlice(right))
     result := 0
@@ -38,7 +21,29 @@ func PartOne(input []byte) int {
     return result
 }
 
-func PartTwo(input string) int {
+func PartTwo(input []byte) int {
+    left, right := getArrays(input)
+    m := make(map[int]int)
+    for _, num := range left {
+        if _, ok := m[num]; !ok {
+            m[num] = 0
+        }
+    }
+    for _, num := range right {
+        if reps, ok := m[num]; ok {
+            m[num] = reps + 1
+        }
+    }
+    result := 0
+    for _, num := range left {
+        if reps, ok := m[num]; ok {
+            result += num * reps
+        }
+    }
+    return result
+}
+
+func getArrays(input []byte) ([]int, []int) {
     var left []int
     var right []int
     appendLeft := true
@@ -59,22 +64,5 @@ func PartTwo(input string) int {
             }
         }
     }
-    m := make(map[int]int)
-    for _, num := range left {
-        if _, ok := m[num]; !ok {
-            m[num] = 0
-        }
-    }
-    for _, num := range right {
-        if reps, ok := m[num]; ok {
-            m[num] = reps + 1
-        }
-    }
-    result := 0
-    for _, num := range left {
-        if reps, ok := m[num]; ok {
-            result += num * reps
-        }
-    }
-    return result
+    return left, right
 }

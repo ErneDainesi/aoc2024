@@ -24,7 +24,7 @@ func TestPartTwo(t *testing.T) {
     if error != nil {
         t.Fatalf("error while reading file")
     }
-    result := PartTwo(string(input))
+    result := PartTwo(input)
     if result != expectedValue {
         t.Fatalf("[PART 2] WRONG! got %d expected %d", result, expectedValue)
     }
