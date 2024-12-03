@@ -20,6 +20,37 @@ func PartOne(input []string) int {
             if i == 0 { // first level, i check order is asc or desc
                 orderType = current > next
             }
+            a := math.Abs(float64(current - next))
+            if a < 1 || a > 3 {
+                unsafe++
+                break
+            }
+            if orderType { // desc
+                if current < next {
+                    unsafe++
+                    break
+                }
+            } else { // asc
+                if current > next {
+                    unsafe++
+                    break
+                }
+            }
+        }
+    }
+    return len(input) - 1 - unsafe
+}
+
+        levels := strings.Split(report, " ")
+        for i, level := range levels {
+            if i + 1 > len(levels) - 1 {
+                break
+            }
+            current, _ := strconv.Atoi(string(level))
+            next, _ := strconv.Atoi(string(levels[i + 1]))
+            if i == 0 { // first level, i check order is asc or desc
+                orderType = current > next
+            }
             if next == current {
                 unsafe++
                 break
